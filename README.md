@@ -1,19 +1,34 @@
 # Projeto de Micro Frontends com React + Module Federation
 
-Este repositório (monorepo) implementa um sistema de pedidos dividido em 3 aplicações independentes:
+Este repositório implementa um sistema de pedidos dividido em 3 aplicações independentes para demonstrar a arquitetura de Micro Frontends com Webpack Module Federation.
 
-- `container`: aplicação principal que integra os micros.
-- `micro-cardapio`: exibe os pratos e dispara evento de adição ao pedido.
-- `micro-pedido`: escuta os eventos e mostra os itens selecionados.
+- `container`: aplicação principal responsável por importar e renderizar os micros.
+- `micro-cardapio`: lista pratos disponíveis e envia eventos de adição ao pedido.
+- `micro-pedido`: recebe os eventos e exibe os itens adicionados.
 
-## 1. Tecnologias usadas
+## 1. Objetivo do projeto
+
+Aplicar os conceitos de Micro Frontends em uma aplicação React separada em micros independentes, com integração por uma aplicação container e comunicação entre partes desacopladas.
+
+## 2. Requisitos atendidos
+
+- Aplicação dividida em `container`, `micro-cardapio` e `micro-pedido`.
+- Micro Cardápio exibindo nome, descrição e botão de adicionar ao pedido.
+- Micro Pedido exibindo os itens selecionados.
+- Comunicação entre micros implementada com eventos globais do navegador.
+- Integração entre aplicações feita com Webpack Module Federation.
+- Projeto desenvolvido em React e JavaScript.
+- Organização por responsabilidade com componentes reaproveitáveis.
+- README com instruções de execução e explicação da comunicação.
+
+## 3. Tecnologias usadas
 
 - React
 - Webpack 5
 - Webpack Module Federation
 - JavaScript (sem TypeScript)
 
-## 2. Estrutura do projeto
+## 4. Estrutura do projeto
 
 ```bash
 microfrontend/
@@ -35,7 +50,7 @@ microfrontend/
   README.md
 ```
 
-## 3. Como rodar cada micro
+## 5. Como rodar cada micro
 
 Abra 3 terminais diferentes na pasta raiz `microfrontend`.
 
@@ -71,7 +86,16 @@ Rodando em: `http://localhost:3000`
 
 Acesse `http://localhost:3000` para ver os micros integrados no container.
 
-## 4. Como funciona a comunicação entre os micros
+## 6. Como testar o fluxo completo
+
+1. Inicie primeiro o `micro-cardapio` na porta `3001`.
+2. Inicie depois o `micro-pedido` na porta `3002`.
+3. Inicie por último o `container` na porta `3000`.
+4. Abra `http://localhost:3000` no navegador.
+5. Clique em `Adicionar ao pedido` em qualquer prato.
+6. Verifique que o micro de pedido atualiza a lista e o total de itens em tempo real.
+
+## 7. Como funciona a comunicação entre os micros
 
 A comunicação acontece por eventos globais do navegador:
 
@@ -87,7 +111,7 @@ Fluxo de dados:
 3. O cardápio emite o evento `pedido:add-item` com os dados atualizados.
 4. O micro de pedido recebe o evento e atualiza a lista exibida.
 
-## 5. Como funciona o Module Federation
+## 8. Como funciona o Module Federation
 
 ### Remotos expostos
 
@@ -103,7 +127,7 @@ No `container`, os remotos são configurados assim:
 
 E são carregados com `React.lazy` + `Suspense`.
 
-## 6. Componentes reaproveitaveis por micro
+## 9. Componentes reaproveitáveis por micro
 
 ### Micro Cardapio
 
@@ -114,7 +138,7 @@ E são carregados com `React.lazy` + `Suspense`.
 
 - `ListaPedido`: renderiza os itens adicionados ou mensagem de vazio.
 
-## 7. Scripts de build
+## 10. Scripts de build
 
 Em cada app:
 
@@ -122,14 +146,23 @@ Em cada app:
 npm run build
 ```
 
-## 8. Observacoes importantes
+As três aplicações foram validadas com build de produção sem erros.
+
+## 11. Observações importantes
 
 - Cada app pode ser executada e testada de forma independente.
 - O container depende dos remotos ativos para importar os micros.
-- React e ReactDOM sao compartilhados como singleton para evitar duplicidade.
+- React e ReactDOM são compartilhados como singleton para evitar duplicidade.
+- O projeto foi estruturado em formato de monorepo, conforme permitido no enunciado.
 
-## 9. Entrega no GitHub
+## 12. Link do repositório
 
-1. Suba este monorepo para um repositorio no GitHub.
+Repositório da entrega:
+
+`https://github.com/gabrielbassani450-bot/micro-front.git`
+
+## 13. Entrega no GitHub
+
+1. Suba este monorepo para um repositório no GitHub.
 2. Inclua este `README.md`.
 3. Compartilhe o link do repositorio na plataforma da disciplina.

@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import './styles.css';
 
+// Os micros são carregados sob demanda pelo container via Module Federation.
 const CardapioApp = React.lazy(() => import('cardapio/CardapioApp'));
 const PedidoApp = React.lazy(() => import('pedido/PedidoApp'));
 

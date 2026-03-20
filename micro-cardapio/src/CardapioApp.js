@@ -17,6 +17,7 @@ function CardapioApp() {
     const pedidoAtualizado = [...pedidoAtual, itemPedido];
     window.__PEDIDO_ITEMS__ = pedidoAtualizado;
 
+    // O evento notifica qualquer micro interessado que o pedido foi atualizado.
     window.dispatchEvent(
       new CustomEvent('pedido:add-item', {
         detail: {

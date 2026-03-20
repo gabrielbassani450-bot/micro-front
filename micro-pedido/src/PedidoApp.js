@@ -6,6 +6,7 @@ function PedidoApp() {
   const [itens, setItens] = useState(() => window.__PEDIDO_ITEMS__ || []);
 
   useEffect(() => {
+    // O micro de pedido reage aos eventos globais emitidos pelo micro de cardápio.
     const handleNovoItem = (event) => {
       if (event.detail?.items) {
         setItens(event.detail.items);
