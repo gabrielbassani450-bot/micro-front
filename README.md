@@ -1,0 +1,135 @@
+# Projeto de Micro Frontends com React + Module Federation
+
+Este repositório (monorepo) implementa um sistema de pedidos dividido em 3 aplicações independentes:
+
+- `container`: aplicação principal que integra os micros.
+- `micro-cardapio`: exibe os pratos e dispara evento de adição ao pedido.
+- `micro-pedido`: escuta os eventos e mostra os itens selecionados.
+
+## 1. Tecnologias usadas
+
+- React
+- Webpack 5
+- Webpack Module Federation
+- JavaScript (sem TypeScript)
+
+## 2. Estrutura do projeto
+
+```bash
+microfrontend/
+  container/
+    public/
+    src/
+    package.json
+    webpack.config.js
+  micro-cardapio/
+    public/
+    src/
+    package.json
+    webpack.config.js
+  micro-pedido/
+    public/
+    src/
+    package.json
+    webpack.config.js
+  README.md
+```
+
+## 3. Como rodar cada micro
+
+Abra 3 terminais diferentes na pasta raiz `microfrontend`.
+
+### Terminal 1 - Micro Cardapio
+
+```bash
+cd micro-cardapio
+npm install
+npm start
+```
+
+Rodando em: `http://localhost:3001`
+
+### Terminal 2 - Micro Pedido
+
+```bash
+cd micro-pedido
+npm install
+npm start
+```
+
+Rodando em: `http://localhost:3002`
+
+### Terminal 3 - Container
+
+```bash
+cd container
+npm install
+npm start
+```
+
+Rodando em: `http://localhost:3000`
+
+Acesse `http://localhost:3000` para ver os micros integrados no container.
+
+## 4. Como funciona a comunicação entre os micros
+
+A comunicação acontece por eventos globais do navegador:
+
+- O `micro-cardapio` dispara:
+  - `window.dispatchEvent(new CustomEvent('pedido:add-item', { detail }))`
+- O `micro-pedido` escuta:
+  - `window.addEventListener('pedido:add-item', handler)`
+
+Fluxo de dados:
+
+1. Usuário clica em "Adicionar ao pedido" no cardápio.
+2. O cardápio monta o novo item e atualiza `window.__PEDIDO_ITEMS__`.
+3. O cardápio emite o evento `pedido:add-item` com os dados atualizados.
+4. O micro de pedido recebe o evento e atualiza a lista exibida.
+
+## 5. Como funciona o Module Federation
+
+### Remotos expostos
+
+- `micro-cardapio` expõe `./CardapioApp` via `remoteEntry.js`
+- `micro-pedido` expõe `./PedidoApp` via `remoteEntry.js`
+
+### Container consumindo remotos
+
+No `container`, os remotos são configurados assim:
+
+- `cardapio@http://localhost:3001/remoteEntry.js`
+- `pedido@http://localhost:3002/remoteEntry.js`
+
+E são carregados com `React.lazy` + `Suspense`.
+
+## 6. Componentes reaproveitaveis por micro
+
+### Micro Cardapio
+
+- `PratoCard`: card individual de prato com botao de adicionar.
+- `ListaPratos`: renderiza a colecao de pratos.
+
+### Micro Pedido
+
+- `ListaPedido`: renderiza os itens adicionados ou mensagem de vazio.
+
+## 7. Scripts de build
+
+Em cada app:
+
+```bash
+npm run build
+```
+
+## 8. Observacoes importantes
+
+- Cada app pode ser executada e testada de forma independente.
+- O container depende dos remotos ativos para importar os micros.
+- React e ReactDOM sao compartilhados como singleton para evitar duplicidade.
+
+## 9. Entrega no GitHub
+
+1. Suba este monorepo para um repositorio no GitHub.
+2. Inclua este `README.md`.
+3. Compartilhe o link do repositorio na plataforma da disciplina.
